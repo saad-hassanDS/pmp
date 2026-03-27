@@ -240,18 +240,31 @@ def show_admin_dashboard():
     # Sidebar navigation
     st.sidebar.title("Navigation")
 
-    # Use session state for selectbox, but also listen for selectbox changes
-    selectbox_value = st.sidebar.selectbox(
-        "Select Page",
-        ["Dashboard", "Question Bank", "Import Questions", "Exam Templates", "Students", "Analytics", "Settings"],
-        index=["Dashboard", "Question Bank", "Import Questions", "Exam Templates", "Students", "Analytics", "Settings"].index(st.session_state.admin_page)
-    )
+    # Navigation menu items
+    menu_items = [
+        ("🏠", "Dashboard"),
+        ("📚", "Question Bank"),
+        ("📥", "Import Questions"),
+        ("📋", "Exam Templates"),
+        ("👥", "Students"),
+        ("📊", "Analytics"),
+        ("⚙️", "Settings")
+    ]
 
-    # Update session state if selectbox changed
-    if selectbox_value != st.session_state.admin_page:
-        st.session_state.admin_page = selectbox_value
+    # Create navigation buttons with current page highlighting
+    for icon, page_name in menu_items:
+        # Highlight current page
+        if st.session_state.admin_page == page_name:
+            # Current page - show as selected
+            st.sidebar.markdown(f"**🔹 {icon} {page_name}**")
+        else:
+            # Other pages - show as clickable buttons
+            if st.sidebar.button(f"{icon} {page_name}", key=f"nav_{page_name}", width='stretch'):
+                st.session_state.admin_page = page_name
+                st.rerun()
 
-    if st.sidebar.button("🚪 Logout"):
+    st.sidebar.markdown("---")
+    if st.sidebar.button("🚪 Logout", width='stretch'):
         st.session_state.authenticated = False
         st.session_state.user = None
         if 'admin_page' in st.session_state:
