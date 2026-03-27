@@ -190,7 +190,7 @@ def show_login_page():
 
         email = st.text_input("Email Address", placeholder="your-email@example.com")
 
-        if st.button("Send Magic Link", type="primary", use_container_width=True):
+        if st.button("Send Magic Link", type="primary", width='stretch'):
             if email:
                 # Check if user exists
                 conn = get_db_connection()
@@ -219,7 +219,7 @@ def show_login_page():
 
         st.markdown("---")
         st.markdown("##### 👨‍💼 Administrator Access")
-        if st.button("Admin Login", use_container_width=True):
+        if st.button("Admin Login", width='stretch'):
             # For demo purposes, direct admin login
             conn = get_db_connection()
             admin = conn.execute('SELECT * FROM users WHERE is_admin = 1 LIMIT 1').fetchone()
@@ -290,17 +290,17 @@ def show_admin_dashboard_summary():
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        if st.button("📝 Add New Questions", use_container_width=True):
+        if st.button("📝 Add New Questions", width='stretch'):
             st.session_state.admin_page = "Import Questions"
             st.rerun()
 
     with col2:
-        if st.button("👥 Manage Students", use_container_width=True):
+        if st.button("👥 Manage Students", width='stretch'):
             st.session_state.admin_page = "Students"
             st.rerun()
 
     with col3:
-        if st.button("📊 View Analytics", use_container_width=True):
+        if st.button("📊 View Analytics", width='stretch'):
             st.session_state.admin_page = "Analytics"
             st.rerun()
 
@@ -400,7 +400,7 @@ def show_import_questions():
     }
 
     template_df = pd.DataFrame(template_data)
-    st.dataframe(template_df, use_container_width=True)
+    st.dataframe(template_df, width='stretch')
 
     # Download template
     @st.cache_data
@@ -424,7 +424,7 @@ def show_import_questions():
             df = pd.read_excel(uploaded_file)
 
             st.markdown("#### Preview Uploaded Data")
-            st.dataframe(df.head(), use_container_width=True)
+            st.dataframe(df.head(), width='stretch')
 
             # Validate columns
             required_columns = ['Question', 'Option A', 'Option B', 'Option C', 'Option D',
@@ -629,7 +629,7 @@ def show_admin_analytics():
 
         fig = px.bar(x=domains, y=scores, title="Average Score by Domain")
         fig.update_layout(xaxis_title="Domain", yaxis_title="Average Score (%)")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     conn.close()
 
@@ -969,7 +969,7 @@ def show_exam_results():
 
         fig = px.bar(x=domains, y=scores, title="Performance by Domain")
         fig.update_layout(xaxis_title="Domain", yaxis_title="Score (%)")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     # Difficulty performance
     difficulty_performance = conn.execute('''
@@ -990,7 +990,7 @@ def show_exam_results():
 
         fig = px.bar(x=difficulties, y=scores, title="Performance by Difficulty")
         fig.update_layout(xaxis_title="Difficulty", yaxis_title="Score (%)")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     # Question review
     st.markdown("#### 📋 Question Review")
@@ -1091,7 +1091,7 @@ def show_previous_results():
 
         fig = px.line(x=attempt_dates, y=attempt_scores, title="Score Progression Over Time")
         fig.update_layout(xaxis_title="Date", yaxis_title="Score (%)")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     # Detailed results
     st.markdown("#### 📋 Detailed Results")
