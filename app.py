@@ -233,17 +233,33 @@ def show_login_page():
 def show_admin_dashboard():
     st.title("🛠️ Admin Dashboard")
 
+    # Initialize admin page in session state if not set
+    if 'admin_page' not in st.session_state:
+        st.session_state.admin_page = "Dashboard"
+
     # Sidebar navigation
     st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox(
+
+    # Use session state for selectbox, but also listen for selectbox changes
+    selectbox_value = st.sidebar.selectbox(
         "Select Page",
-        ["Dashboard", "Question Bank", "Import Questions", "Exam Templates", "Students", "Analytics", "Settings"]
+        ["Dashboard", "Question Bank", "Import Questions", "Exam Templates", "Students", "Analytics", "Settings"],
+        index=["Dashboard", "Question Bank", "Import Questions", "Exam Templates", "Students", "Analytics", "Settings"].index(st.session_state.admin_page)
     )
+
+    # Update session state if selectbox changed
+    if selectbox_value != st.session_state.admin_page:
+        st.session_state.admin_page = selectbox_value
 
     if st.sidebar.button("🚪 Logout"):
         st.session_state.authenticated = False
         st.session_state.user = None
+        if 'admin_page' in st.session_state:
+            del st.session_state.admin_page
         st.rerun()
+
+    # Use session state to determine which page to show
+    page = st.session_state.admin_page
 
     if page == "Dashboard":
         show_admin_dashboard_summary()
